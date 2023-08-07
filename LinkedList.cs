@@ -11,25 +11,14 @@ namespace dsa_console
         public Node first;
         public Node last;
 
-        private class Node
-        {
-            public int value;
-            public Node next;
-
-            public Node(int val)
-            {
-                this.value = val;
-            }
-        }
-
-        public LinkedList() =>
-            this.first = this.last = null;
+        public LinkedList() => this.first = this.last = null;
+        private bool IsEmpty() => this.first == null;
 
         public void AddFirst(int value)
         {
             Node node = new Node(value);
 
-            if (this.first == null)
+            if (IsEmpty())
             {
                 this.first = node;
                 this.last = this.first;
@@ -40,11 +29,10 @@ namespace dsa_console
             this.first = node;
         }
 
-        // This works (for now at least)
         public void AddLast(int value)
         {
             Node node = new Node(value);
-            if (this.first == null)
+            if (IsEmpty())
             {
                 this.first = node;
                 this.last = this.first;
@@ -55,41 +43,53 @@ namespace dsa_console
             this.last = this.last.next;
         }
 
-        // Idk what to do here yet
         public void DeleteFirst()
         {
-            if (this.first == null) return;
+            if (IsEmpty()) return;
+            if (this.first == this.last)
+            {
+                this.first = this.last = null;
+                return;
+            }
 
             Node node = this.first.next;
-            this.first = null;
+
+            this.first.next = null;
+            this.first = node;
         }
 
-        // Time complexity: O(n)
+        private Node GetPreviousNode(Node node)
+        {
+            Node currentNode = this.first;
+            while (currentNode != null)
+            {
+                if (currentNode.next == node)
+                    return currentNode;
+                currentNode = currentNode.next;
+            }
+            return null;
+        }
+
         public void DeleteLast()
         {
-            Node node = this.first;
-            Node next = node.next;
+            if (IsEmpty())
+                throw new Exception("Linked List is empty");
 
-            if (node == null) return;
-            if (node == this.first && node.next == null)
-                this.first = null;
-
-            do // I hate goddamn do while loops
+            if (this.first == this.last)
             {
-                // Find a way to keep track of each node in the list
-                if (next.next == null)
-                    node.next = this.last = null;
-
-                node = next; // this.first = this.first.next
-                next = node.next;
-
-            } while (next.next != null);
+                this.first = this.last = null;
+                return;
+            }
+            
+            Node node = GetPreviousNode(this.last);
+            this.last = node;
+            this.last.next = null;
         }
 
         public int IndexOf(int value)
         {
             int index = 0;
-            if (this.first == null) return -1;
+            if (IsEmpty()) return -1;
 
             Node node = this.first;
             while (node.value != value)
@@ -102,7 +102,7 @@ namespace dsa_console
 
         public bool Contains(int value)
         {
-            if (this.first == null) return false;
+            if (IsEmpty()) return false;
             Node node = this.first;
 
             while (node.next != null)
