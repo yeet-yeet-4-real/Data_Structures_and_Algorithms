@@ -10,8 +10,14 @@ namespace dsa_console
     {
         public Node first;
         public Node last;
+        private int length;
 
-        public LinkedList() => this.first = this.last = null;
+        public LinkedList()
+        {
+            this.length = 0;
+            this.first = this.last = null;
+        }
+
         private bool IsEmpty() => this.first == null;
 
         public void AddFirst(int value)
@@ -20,13 +26,16 @@ namespace dsa_console
 
             if (IsEmpty())
             {
+                this.length++;
                 this.first = node;
                 this.last = this.first;
                 return;
             }
 
+            this.length++;
             node.next = this.first;
             this.first = node;
+            
         }
 
         public void AddLast(int value)
@@ -34,11 +43,13 @@ namespace dsa_console
             Node node = new Node(value);
             if (IsEmpty())
             {
+                this.length++;
                 this.first = node;
                 this.last = this.first;
                 return;
             }
 
+            this.length++;
             this.last.next = node;
             this.last = this.last.next;
         }
@@ -48,14 +59,16 @@ namespace dsa_console
             if (IsEmpty()) return;
             if (this.first == this.last)
             {
+                this.length--;
                 this.first = this.last = null;
                 return;
             }
 
             Node node = this.first.next;
-
+            this.length--;
             this.first.next = null;
             this.first = node;
+            
         }
 
         private Node GetPreviousNode(Node node)
@@ -77,11 +90,13 @@ namespace dsa_console
 
             if (this.first == this.last)
             {
+                this.length--;
                 this.first = this.last = null;
                 return;
             }
             
             Node node = GetPreviousNode(this.last);
+            this.length--;
             this.last = node;
             this.last.next = null;
         }
@@ -92,25 +107,25 @@ namespace dsa_console
             if (IsEmpty()) return -1;
 
             Node node = this.first;
-            while (node.value != value)
+            while (node != null)
             {
+                if (node.value == value) return index;
                 node = node.next;
                 index++;
             }
-            return index;
+            return -1;
+        }
+
+        public int Size()
+        {
+            return this.length;
         }
 
         public bool Contains(int value)
         {
-            if (IsEmpty()) return false;
-            Node node = this.first;
-
-            while (node.next != null)
-            {
-                if (node.value == value) return true;
-                node = node.next;
-            }
-            return false;
+            if (IsEmpty())
+                return false;
+            return IndexOf(value) != -1;
         }
     }
 }
