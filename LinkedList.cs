@@ -12,12 +12,7 @@ namespace dsa_console
         public Node last;
         private int length;
 
-        public LinkedList()
-        {
-            this.length = 0;
-            this.first = this.last = null;
-        }
-
+        public LinkedList() => this.first = this.last = null;
         private bool IsEmpty() => this.first == null;
 
         public void AddFirst(int value)
@@ -35,7 +30,6 @@ namespace dsa_console
             this.length++;
             node.next = this.first;
             this.first = node;
-            
         }
 
         public void AddLast(int value)
@@ -68,7 +62,6 @@ namespace dsa_console
             this.length--;
             this.first.next = null;
             this.first = node;
-            
         }
 
         private Node GetPreviousNode(Node node)
@@ -116,16 +109,27 @@ namespace dsa_console
             return -1;
         }
 
-        public int Size()
-        {
-            return this.length;
-        }
+        public int Size() => this.length;
 
         public bool Contains(int value)
         {
             if (IsEmpty())
                 return false;
             return IndexOf(value) != -1;
+        }
+
+        public int[] ToArray()
+        {
+            int index = 0;
+            int[] array = new int[this.length];
+            Node node = this.first;
+
+            while (node != null)
+            {
+                array[index++] = node.value;
+                node = node.next;
+            }
+            return array;
         }
     }
 }
